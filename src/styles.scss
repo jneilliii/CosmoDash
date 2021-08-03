@@ -38,7 +38,7 @@ $OctoDash-theme: mat-dark-theme($OctoDash-primary, $OctoDash-accent, $OctoDash-w
   font-weight: 400;
   font-display: swap;
   src: local('Product Sans'), local('ProductSans-Regular'),
-    url(assets/fonts/ProductSans-Regular.woff2) format('woff2');
+    url(assets/fonts/ProductSans-Regular.ttf) format('truetype');
 }
 
 @font-face {
@@ -47,7 +47,7 @@ $OctoDash-theme: mat-dark-theme($OctoDash-primary, $OctoDash-accent, $OctoDash-w
   font-weight: 500;
   font-display: swap;
   src: local('Product Sans Medium'), local('ProductSans-Medium'),
-    url(assets/fonts/ProductSans-Medium.woff2) format('woff2');
+    url(assets/fonts/ProductSans-Medium.ttf) format('truetype');
 }
 
 *:not(path):not(svg) {
