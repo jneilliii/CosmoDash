@@ -249,6 +249,10 @@ export class ConfigService {
     return this.config.plugins.filamentManager.enabled;
   }
 
+  public getAutomaticHeatingStartSeconds(): number {
+    return this.config.octodash.automaticHeatingStartSeconds;
+  }
+
   public getFeedLength(): number {
     return this.config.filament.feedLength;
   }
