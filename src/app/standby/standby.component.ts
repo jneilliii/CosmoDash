@@ -43,9 +43,20 @@ export class StandbyComponent implements OnInit, OnDestroy {
     this.actionsVisible = false;
     this.connecting = true;
     if (this.configService.getAutomaticPrinterPowerOn()) {
+      // enable PSU, wait 5s and reconnect
       this.enclosureService.setPSUState(PSUState.ON);
       setTimeout(this.connectPrinter.bind(this), 5000);
+    } else if (true) {
+      // TODO add settings to control reset behavior and pin
+      // reset controller for 1s, wait 10s for init and reconnect
+      const resetPin = 1
+      this.enclosureService.setOutput(resetPin, true)
+      setTimeout((() => {
+        this.enclosureService.setOutput(resetPin, false)
+        setTimeout(this.connectPrinter.bind(this), 10000);
+      }).bind(this), 1000)
     } else {
+      // just reconnect
       this.connectPrinter();
     }
   }
