@@ -1183,11 +1183,11 @@
       </trans-unit>
       <trans-unit id="octoprint-sleeping" datatype="html">
         <source>Shhh! OctoDash is sleeping.</source>
-        <target>Chut ! OctoDash dort.</target>
+        <target>Votre Nova est en veille.</target>
       </trans-unit>
       <trans-unit id="octoprint-sleeping-message" datatype="html">
         <source>Press on the screen to wake me up again.</source>
-        <target>Appuyez sur l'écran pour me réveiller à nouveau.</target>
+        <target>Touchez l'écran pour l'activer</target>
       </trans-unit>
       <trans-unit id="sleeping" datatype="html">
         <source> sleeping ... </source>
