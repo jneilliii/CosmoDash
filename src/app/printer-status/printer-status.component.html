@@ -9,7 +9,7 @@
     >
       <img src="assets/nozzle.svg" />
       <span class="printer-status__actual-value">
-        {{ printerStatus.tool0.current }}<span class="printer-status__unit">°C</span>
+        {{ printerStatus.tool0.current || 0 }}<span class="printer-status__unit">°C</span>
       </span>
       <span class="printer-status__set-value" *ngIf="printerStatus.tool0.set">
         /{{ printerStatus.tool0.set }}<span class="unit">°C</span>
@@ -24,7 +24,7 @@
     >
       <img src="assets/heat-bed.svg" />
       <span class="printer-status__actual-value">
-        {{ printerStatus.bed.current }}<span class="printer-status__unit">°C</span>
+        {{ printerStatus.bed.current || 0 }}<span class="printer-status__unit">°C</span>
       </span>
       <span class="printer-status__set-value" *ngIf="printerStatus.bed.set">
         /{{ printerStatus.bed.set }}<span class="unit">°C</span>
