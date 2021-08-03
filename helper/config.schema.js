@@ -261,6 +261,7 @@ const configSchema = {
       $id: '#/properties/octodash',
       type: 'object',
       required: [
+        'automaticHeatingStartSeconds',
         'customActions',
         'fileSorting',
         'invertAxisControl',
@@ -274,6 +275,10 @@ const configSchema = {
         'screenWakeupCommand',
       ],
       properties: {
+        automaticHeatingStartSeconds: {
+          $id: '#/properties/octodash/properties/automaticHeatingStartSeconds',
+          type: 'number'
+        },
         customActions: {
           $id: '#/properties/octodash/properties/customActions',
           type: 'array',

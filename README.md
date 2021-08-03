@@ -65,6 +65,7 @@ For more info have a look at the [wiki](https://github.com/UnchartedBull/OctoDas
 - The six actions on the right in the control view can be customized. They can either send GCode commands to your printer, restart OctoPrint or your Pi and even open iFrames so you can view your camera
 - You can adjust the temperatures and fan speed in the home screen by pressing on their icons, if you want to set them to zero, just tap the value once (v1.4.1 and up)
 - OctoDash will start in your host's language if it is supported. You can start OctoDash in a different supported language by starting it with `LANG=fr_FR.UTF-8 octodash`. Currently supported languages are: `fr_FR.UTF-8`, english will be used if your requested language isn't available
+- To disable automatic heating after the countdown in the Filament section, set the `automaticHeatingStartSeconds` property of OctoDash settings to `-1`, to enable automatic heating set it to a value in seconds.
 
 ## Demo
 

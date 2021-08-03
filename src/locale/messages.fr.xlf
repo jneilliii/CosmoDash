@@ -380,6 +380,10 @@
         <source> skip </source>
         <target> passer </target>
       </trans-unit>
+      <trans-unit id="nozzle-select-temp" datatype="html">
+        <source>select heating temperature</source>
+        <target>réglage de la température</target>
+      </trans-unit>
       <trans-unit id="nozzle-heating" datatype="html">
         <source>heating the nozzle, please wait...</source>
         <target>préchauffage de la buse, veuillez patienter...</target>

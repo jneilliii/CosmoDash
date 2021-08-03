@@ -1,4 +1,15 @@
-<span class="filament-heading" i18n="@@nozzle-heating">heating the nozzle, please wait...</span>
+<span
+  *ngIf="!isHeating"
+  class="filament-heading"
+  i18n="@@nozzle-select-temp">
+  select heating temperature
+</span>
+<span
+  *ngIf="isHeating"
+  class="filament-heading"
+  i18n="@@nozzle-heating">
+  heating the nozzle, please wait...
+</span>
 <div class="heating__center">
   <div class="heating__controller">
     <div class="heating__controller-row">
@@ -42,7 +53,7 @@
   </div>
 </div>
 <div class="heating__start-wrapper" *ngIf="!isHeating">
-  <span>
+  <span *ngIf="automaticHeatingStartSeconds >= 0">
     <ng-container i18n="@@nozzle-heating-wait">wait</ng-container>
     <span> {{ automaticHeatingStartSeconds }}</span>
     <ng-container i18n="@@nozzle-heating-wait-seconds-or">s or</ng-container>

@@ -65,6 +65,7 @@ export const defaultConfig: Config = {
     },
   },
   octodash: {
+    automaticHeatingStartSeconds: 6,
     customActions: [
       {
         icon: 'home',

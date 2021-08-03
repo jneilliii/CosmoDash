@@ -91,6 +91,7 @@ interface TasmotaMqttPlugin extends Plugin {
 }
 
 interface OctoDash {
+  automaticHeatingStartSeconds: number;
   customActions: CustomAction[];
   fileSorting: FileSorting;
   invertAxisControl: InvertAxisControl;
