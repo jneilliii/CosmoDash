@@ -40,15 +40,17 @@ export class EventService implements OnDestroy {
 
   private handlePrinterNotification(event: PrinterNotification): void {
     const messages = {
-      'FilamentRunout T0': $localize`:@@prompt-filament-runout-t0:Filament runout detected. Ejecting filament, please wait...`,
-      'Nozzle Parked': $localize`:@@prompt-filament-runout:A filament runout has been detected. Please remove the ejected filament, insert filament from a new spool and press Continue.`,
       'Continue': $localize`:@@prompt-continue:Continue`,
+      'Dismiss': $localize`:@@prompt-dismiss:Dismiss`,
+      'FilamentRunout T0': $localize`:@@prompt-filament-runout-t0:Filament runout detected. Ejecting filament, please wait...`,
+      'G29 Retrying': $localize`:@@prompt-bed-levelling-error:Error while probing bed level. Retrying, check bed placement.`,
+      'Heater Timeout': $localize`:@@prompt-heater-timeout:The hotend has been disabled due to inactivity, to avoid burning the filament. Press Reheat when ready to resume.`,
+      'Nozzle Parked': $localize`:@@prompt-filament-runout:A filament runout has been detected. Please remove the ejected filament, insert filament from a new spool and press Continue.`,
       'Paused': $localize`:@@prompt-filament-runout-resume:The filament has been primed. Do you want to continue printing?`,
       'PurgeMore': $localize`:@@prompt-filament-runout-purge:Purge more filament`,
-      'Heater Timeout': $localize`:@@prompt-heater-timeout:The hotend has been disabled due to inactivity, to avoid burning the filament. Press Reheat when ready to resume.`,
       'Reheat': $localize`:@@prompt-reheat:Reheat`,
-      'Reheating...': $localize`:@@prompt-reheating:Reheating...`,
       'Reheat Done': $localize`:@@prompt-reheat-done:The hotend is now ready.`,
+      'Reheating...': $localize`:@@prompt-reheating:Reheating...`,
     };
     if (event.action === 'close') {
       this.notificationService.closeNotification();

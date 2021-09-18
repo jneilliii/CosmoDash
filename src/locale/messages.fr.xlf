@@ -284,9 +284,13 @@
         <source>do you want to execute the following command?</source>
         <target>voulez-vous exécuter la commande suivante ?</target>
       </trans-unit>
+      <trans-unit id="prompt-bed-levelling-error" datatype="html">
+        <source>Error while probing bed level. Retrying, check bed placement.</source>
+        <target>Erreur de détection du niveau de plateau. Nouvelle tentative, contrôlez la mise en place du plateau.</target>
+      </trans-unit>
       <trans-unit id="prompt-filament-runout-t0" datatype="html">
         <source>Filament runout detected. Ejecting filament, please wait...</source>
-        <target>Fin de filament détectée. Ejection du filament, veuillez patienter...</target>
+        <target>Fin de filament détectée. Éjection du filament, veuillez patienter...</target>
       </trans-unit>
       <trans-unit id="prompt-filament-runout" datatype="html">
         <source>A filament runout has been detected. Please remove the ejected filament, insert filament from a new spool and press Continue.</source>
@@ -295,6 +299,10 @@
       <trans-unit id="prompt-continue" datatype="html">
         <source>Continue</source>
         <target>Continuer</target>
+      </trans-unit>
+      <trans-unit id="prompt-dismiss" datatype="html">
+        <source>Dismiss</source>
+        <target>Fermer</target>
       </trans-unit>
       <trans-unit id="prompt-filament-runout-resume" datatype="html">
         <source>The filament has been primed. Do you want to continue printing?</source>
