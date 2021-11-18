@@ -35,8 +35,9 @@ function saveConfig(window, config) {
     try {
       store.set('config', config);
       window.webContents.send('configSaved', config);
-    } catch {
+    } catch (e) {
       window.webContents.send('configError', "Can't save config file.");
+      console.error(e.message)
     }
   } else {
     window.webContents.send('configSaveFail', getConfigErrors());
