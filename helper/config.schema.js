@@ -50,6 +50,11 @@ const configSchema = {
           type: 'string',
           pattern: '^(.*)$',
         },
+        saveSettingsGCode: {
+          $id: '#/properties/printer/properties/saveSettingsGCode',
+          type: 'string',
+          pattern: '^(.*)$',
+        },
         defaultTemperatureFanSpeed: {
           $id: '#/properties/printer/properties/defaultTemperatureFanSpeed',
           type: 'object',

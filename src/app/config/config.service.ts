@@ -289,6 +289,10 @@ export class ConfigService {
     return this.config.printer.zBabystepGCode;
   }
 
+  public getSaveSettingsGCode(): string {
+    return this.config.printer.saveSettingsGCode;
+  }
+
   public getPreviewProgressCircle(): boolean {
     return this.config.octodash.previewProgressCircle;
   }

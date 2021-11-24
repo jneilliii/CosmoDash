@@ -41,8 +41,8 @@ export class PrinterOctoprintService implements PrinterService {
       );
   }
 
-  saveToEPROM(): void {
-    this.executeGCode('M500');
+  saveSettings(): void {
+    this.executeGCode(this.configService.getSaveSettingsGCode());
   }
 
   public executeGCode(gCode: string): void {

@@ -30,6 +30,7 @@ interface Printer {
   disableExtruderGCode: string;
   zBabystepGCode: string;
   defaultTemperatureFanSpeed: DefaultTemperatureFanSpeed;
+  saveSettingsGCode: string;
 }
 
 interface DefaultTemperatureFanSpeed {
