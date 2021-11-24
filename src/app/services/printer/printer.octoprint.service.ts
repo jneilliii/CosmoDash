@@ -206,18 +206,16 @@ export class PrinterOctoprintService implements PrinterService {
 
   public getZOffset(): Observable<Object> {
     return this.http.get(
-      this.configService.getApiURL('plugin/z_probe_offset'),
+      this.configService.getApiURL('plugin/z_probe_offset_universal'),
       this.configService.getHTTPHeaders()
     );
   }
 
   public setZOffset(offset: number): void {
-    // this.http.post(
-    //   this.configService.getApiURL('plugin/z_probe_offset'),
-    //   offset,
-    //   this.configService.getHTTPHeaders()
-    // );
-    this.executeGCode('M851 Z' + offset)
-    setTimeout(() => this.executeGCode('M500'), 500);
+    this.http.post(
+      this.configService.getApiURL('plugin/z_probe_offset_universal'),
+      { offset },
+      this.configService.getHTTPHeaders()
+    );
   }
 }
