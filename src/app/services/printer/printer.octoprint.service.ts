@@ -214,8 +214,8 @@ export class PrinterOctoprintService implements PrinterService {
   public setZOffset(offset: number): void {
     this.http.post(
       this.configService.getApiURL('plugin/z_probe_offset_universal'),
-      { offset },
+      { command: 'set', offset },
       this.configService.getHTTPHeaders()
-    );
+    ).subscribe();
   }
 }

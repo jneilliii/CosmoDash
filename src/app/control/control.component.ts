@@ -87,7 +87,6 @@ export class ControlComponent implements OnInit {
     if (this[item] <= -999) {
       this.fetchZOffset()
     }
-    console.log(this.zOffset)
   }
 
   public quickControlSettings() {
