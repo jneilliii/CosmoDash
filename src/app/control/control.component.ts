@@ -100,7 +100,10 @@ export class ControlComponent implements OnInit {
       changeValue: (value: number) => this.changeValue('zOffset', Number(value)),
       setValue: () => {
         this.printerService.setZOffset(this.zOffset);
-        setTimeout(() => this.fetchZOffset(), 500);
+        setTimeout(() => {
+          this.fetchZOffset()
+          this.printerService.saveSettings()
+        }, 500);
         this.hideQuickControl();
       },
     }
