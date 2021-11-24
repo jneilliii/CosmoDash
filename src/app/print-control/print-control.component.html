@@ -175,7 +175,7 @@
         {{ zOffset == 0 ? '±' : zOffset > 0 ? '+' : '-' }} {{ getZOffset() }}
         <ng-container i18n="@@offset-mm">mm</ng-container>
       </span>
-      <div
+      <!-- <div
         class="print-control__adjust__save"
         (click)="setAdjustParameters($event)"
         matRipple
@@ -183,7 +183,7 @@
         i18n="@@offset-save"
       >
         save
-      </div>
+      </div> -->
     </div>
   </div>
   <div *ngIf="view === controlView.BABYSTEP" (click)="stopPropagation($event)">

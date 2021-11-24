@@ -29,6 +29,5 @@ export abstract class PrinterService {
 
   abstract emergencyStop(): void;
 
-  abstract getZOffset(): Observable<Object>;
   abstract setZOffset(offset: number): void;
 }

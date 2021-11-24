@@ -47,7 +47,7 @@ export class PrinterOctoprintService implements PrinterService {
 
   public executeGCode(gCode: string): void {
     const gCodePayload: GCodeCommand = {
-      commands: gCode.split('; '),
+      commands: gCode.split(';'),
     };
     this.http
       .post(this.configService.getApiURL('printer/command'), gCodePayload, this.configService.getHTTPHeaders())
@@ -202,13 +202,6 @@ export class PrinterOctoprintService implements PrinterService {
 
   public setFanSpeed(percentage: number): void {
     this.executeGCode('M106 S' + Math.round((percentage / 100) * 255));
-  }
-
-  public getZOffset(): Observable<Object> {
-    return this.http.get(
-      this.configService.getApiURL('plugin/z_probe_offset_universal'),
-      this.configService.getHTTPHeaders()
-    );
   }
 
   public setZOffset(offset: number): void {

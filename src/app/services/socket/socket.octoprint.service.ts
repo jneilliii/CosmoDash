@@ -7,7 +7,15 @@ import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
 
 import { ConfigService } from '../../config/config.service';
 import { ConversionService } from '../../conversion.service';
-import { JobStatus, PrinterEvent, PrinterNotification, PrinterState, PrinterStatus, SocketAuth } from '../../model';
+import {
+  JobStatus,
+  PrinterEvent,
+  PrinterNotification,
+  PrinterState,
+  PrinterStatus,
+  SocketAuth,
+  ZOffset,
+} from '../../model';
 import {
   DisplayLayerProgressData,
   OctoprintFilament,
@@ -26,10 +34,12 @@ export class OctoPrintSocketService implements SocketService {
   private printerStatusSubject: Subject<PrinterStatus>;
   private jobStatusSubject: Subject<JobStatus>;
   private eventSubject: Subject<PrinterEvent | PrinterNotification>;
+  private zOffsetSubject: Subject<ZOffset>;
 
   private printerStatus: PrinterStatus;
   private jobStatus: JobStatus;
   private lastState: PrinterEvent;
+  private zOffset: ZOffset;
 
   public constructor(
     private configService: ConfigService,
@@ -40,6 +50,7 @@ export class OctoPrintSocketService implements SocketService {
     this.printerStatusSubject = new ReplaySubject<PrinterStatus>();
     this.jobStatusSubject = new Subject<JobStatus>();
     this.eventSubject = new ReplaySubject<PrinterEvent | PrinterNotification>();
+    this.zOffsetSubject = new ReplaySubject<ZOffset>();
   }
 
   //==== SETUP & AUTH ====//
@@ -47,6 +58,7 @@ export class OctoPrintSocketService implements SocketService {
   public connect(): Promise<void> {
     this.initPrinterStatus();
     this.initJobStatus();
+    this.initZOfset();
     this.lastState = PrinterEvent.UNKNOWN;
 
     return new Promise(resolve => {
@@ -88,6 +100,21 @@ export class OctoPrintSocketService implements SocketService {
     } as JobStatus;
   }
 
+  private initZOfset(): void {
+    this.http.get(
+      this.configService.getApiURL('plugin/z_probe_offset_universal'),
+      this.configService.getHTTPHeaders()
+    ).subscribe((zOffset: ZOffset) => {
+      this.zOffset = {
+        printer_cap: {
+          eeprom: null,
+          z_probe: null,
+        },
+        z_offset: zOffset.z_offset,
+      } as ZOffset;
+    });
+  }
+
   private tryConnect(resolve: () => void): void {
     this.systemService.getSessionKey().subscribe(
       socketAuth => {
@@ -117,6 +144,7 @@ export class OctoPrintSocketService implements SocketService {
   }
 
   private handlePluginMessage(pluginMessage: OctoprintPluginMessage) {
+    // console.log(pluginMessage.plugin.plugin, pluginMessage.plugin.data)
     const plugins = [
       {
         check: (plugin: string) => plugin === 'DisplayLayerProgress-websocket-payload'
@@ -130,6 +158,12 @@ export class OctoPrintSocketService implements SocketService {
         check: (plugin: string) => ['action_command_prompt', 'action_command_notification'].includes(plugin),
         handler: (data: unknown) => this.eventSubject.next(data as PrinterNotification),
       },
+      {
+        check: (plugin: string) => plugin === 'z_probe_offset_universal',
+        handler: (data: any) => this.zOffsetSubject.next({
+          z_offset: data.msg
+        } as ZOffset)
+      }
     ];
 
     plugins.forEach(plugin =>
@@ -319,5 +353,9 @@ export class OctoPrintSocketService implements SocketService {
 
   public getEventSubscribable(): Observable<PrinterEvent | PrinterNotification> {
     return this.eventSubject;
+  }
+
+  public getZOffsetSubscribable(): Observable<ZOffset> {
+    return this.zOffsetSubject.pipe(startWith(this.zOffset));
   }
 }

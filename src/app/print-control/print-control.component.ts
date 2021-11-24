@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 
 import { ConfigService } from '../config/config.service';
-import { PrinterState, PrinterStatus } from '../model';
+import { PrinterState, PrinterStatus, ZOffset } from '../model';
 import { JobService } from '../services/job/job.service';
 import { PrinterService } from '../services/printer/printer.service';
 import { SocketService } from '../services/socket/socket.service';
@@ -58,6 +58,11 @@ export class PrintControlComponent implements OnInit, OnDestroy {
           this.showedPauseScreen = false;
         }
       }),
+    );
+    this.subscriptions.add(
+      this.socketService.getZOffsetSubscribable().subscribe((zOffset: ZOffset) => {
+        this.zOffset = zOffset.z_offset;
+      })
     );
   }
 

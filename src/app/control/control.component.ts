@@ -31,7 +31,6 @@ export class ControlComponent implements OnInit {
     private notificationService: NotificationService,
     private socketService: SocketService,
   ) {
-    this.fetchZOffset();
     this.printerService.getActiveProfile().subscribe(
       (printerProfile: OctoprintPrinterProfile) => (this.printerProfile = printerProfile),
       err => {
@@ -48,6 +47,11 @@ export class ControlComponent implements OnInit {
       this.socketService.getPrinterStatusSubscribable().subscribe((status: PrinterStatus): void => {
         this.printerStatus = status;
       }),
+    );
+    this.subscriptions.add(
+      this.socketService.getZOffsetSubscribable().subscribe((zOffset: ZOffset): void => {
+        this.zOffset = zOffset.z_offset;
+      })
     );
   }
 
@@ -72,12 +76,6 @@ export class ControlComponent implements OnInit {
     );
   }
 
-  private fetchZOffset(): void {
-    this.printerService.getZOffset().subscribe((data: ZOffset) => {
-      this.zOffset = data.z_offset;
-    });
-  }
-
   public getZOffset(): string {
     return this.zOffset.toFixed(2);
   }
@@ -85,7 +83,7 @@ export class ControlComponent implements OnInit {
   private changeValue(item: string, value: number): void {
     this[item] = Math.round((this[item] + value) * 100) / 100;
     if (this[item] <= -999) {
-      this.fetchZOffset()
+      this.printerService.setZOffset(0)
     }
   }
 
@@ -100,10 +98,6 @@ export class ControlComponent implements OnInit {
       changeValue: (value: number) => this.changeValue('zOffset', Number(value)),
       setValue: () => {
         this.printerService.setZOffset(this.zOffset);
-        setTimeout(() => {
-          this.fetchZOffset()
-          this.printerService.saveSettings()
-        }, 500);
         this.hideQuickControl();
       },
     }
