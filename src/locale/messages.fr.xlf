@@ -652,9 +652,9 @@
         <source>mm</source>
         <target>mm</target>
       </trans-unit>
-      <trans-unit id="offset-save" datatype="html">
-        <source> save </source>
-        <target> sauvegarder </target>
+      <trans-unit id="offset-apply" datatype="html">
+        <source> apply </source>
+        <target> appliquer </target>
       </trans-unit>
       <trans-unit id="babystep-back" datatype="html">
         <source>back</source>
