@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { clamp } from 'lodash-es';
 import { AnimationItem } from 'lottie-web';
 import { AnimationOptions } from 'ngx-lottie';
 import { take } from 'rxjs/operators';
@@ -10,6 +11,15 @@ import { FilamentService } from '../services/filament/filament.service';
 import { PrinterService } from '../services/printer/printer.service';
 import { SocketService } from '../services/socket/socket.service';
 
+export enum EtapeFilament {
+  Choix,
+  Chauffage,
+  Deplacement,
+  Changement,
+  Purge,
+  End
+}
+
 @Component({
   selector: 'app-filament',
   templateUrl: './filament.component.html',
@@ -19,6 +29,8 @@ import { SocketService } from '../services/socket/socket.service';
 export class FilamentComponent implements OnInit, OnDestroy {
   private totalPages = 5;
   private hotendPreviousTemperature = 0;
+  public etape: EtapeFilament;
+  public EtapeFilament = EtapeFilament;
 
   public page: number;
   public showCheckmark = false;
@@ -46,35 +58,96 @@ export class FilamentComponent implements OnInit, OnDestroy {
   public ngOnInit(): void {
     if (this.configService.isFilamentManagerEnabled()) {
       this.setPage(0);
+      this.etape = EtapeFilament.Choix;
     } else {
       this.setPage(1);
+      this.etape = EtapeFilament.Chauffage;
     }
+  }
+
+  public transition(direction: 'forward' | 'backward'): void {
+    switch(this.etape) {
+      case EtapeFilament.Choix:
+        this.transitionChoix(direction);
+        break;
+      case EtapeFilament.Chauffage:
+        this.transitionChauffage(direction);
+        break;
+      case EtapeFilament.Changement:
+        this.transitionChangement(direction);
+        break;
+    }
+    this.act();
+  }
+
+  private transitionChoix(direction: 'forward' | 'backward') {
+    switch(direction) {
+      case 'forward':
+        this.etape = EtapeFilament.Chauffage;
+        break;
+      case 'backward':
+        this.etape = EtapeFilament.End;
+        break;
+    }
+  }
+
+  private transitionChauffage(direction: 'forward' | 'backward') {
+    if (direction === 'forward') {
+      this.etape = EtapeFilament.Changement;
+    } else {
+      if (this.configService.isFilamentManagerEnabled()) {
+        this.etape = EtapeFilament.Choix;
+      } else {
+        this.etape = EtapeFilament.End;
+      }
+    }
+  }
+
+  private transitionChangement(direction: 'forward' | 'backward') {
+    switch(direction) {
+      case 'forward':
+        this.etape = EtapeFilament.End;
+        break;
+      case 'backward':
+        this.etape = EtapeFilament.Chauffage;
+        break;
+    }
+  }
+
+  public act(): void {
+    switch(this.etape) {
+      case EtapeFilament.Changement:
+        this.actChangement();
+        break;
+      case EtapeFilament.End:
+        this.actEnd();
+        break;
+    }
+  }
+
+  private actChangement() {
+    this.printerService.executeGCode('M600');
+    this.transition('forward');
+  }
+
+  private actEnd() {
+    this.navigateToMainScreen();
+  }
+
+  private navigateToMainScreen() {
+    this.router.navigate(['/main-screen']);
   }
 
   public ngOnDestroy(): void {
     this.printerService.setTemperatureHotend(this.hotendPreviousTemperature);
   }
 
-  public increasePage(returnToMainScreen = false): void {
-    if (this.page === this.totalPages || returnToMainScreen) {
-      this.router.navigate(['/main-screen']);
-    } else if (this.page < this.totalPages) {
-      this.setPage(this.page + 1);
-    }
+  public increasePage(): void {
+    this.transition('forward');
   }
 
   public decreasePage(): void {
-    if (this.page === 0) {
-      this.router.navigate(['/main-screen']);
-    } else if (this.page === 1 && this.configService.isFilamentManagerEnabled()) {
-      this.setPage(0);
-    } else if (this.page === 1) {
-      this.router.navigate(['/main-screen']);
-    } else if (this.page === 2 || this.page === 3) {
-      this.setPage(1);
-    } else if (this.page === 4 || this.page === 5) {
-      this.setPage(3);
-    }
+    this.transition('backward');
   }
 
   private setPage(page: number): void {
@@ -84,7 +157,7 @@ export class FilamentComponent implements OnInit, OnDestroy {
         document.getElementById('progressBar').style.width = this.page * (20 / this.totalPages) + 'vw';
       }
     }, 200);
-    this.page = page;
+    this.page = clamp(this.page, 0, this.totalPages);
   }
 
   public setSpool(spoolInformation: { spool: FilamentSpool; skipChange: boolean }): void {
@@ -102,11 +175,18 @@ export class FilamentComponent implements OnInit, OnDestroy {
         .setSpool(this.selectedSpool)
         .then((): void => {
           this.showCheckmark = true;
-          setTimeout(this.increasePage.bind(this), 1350, true);
+          setTimeout(() => {
+            this.etape = EtapeFilament.End;
+            this.act();
+          }, 1350);
         })
-        .catch(() => this.increasePage(true));
+        .catch(() => {
+          this.etape = EtapeFilament.End;
+          this.act();
+        });
     } else {
-      this.increasePage(true);
+      this.etape = EtapeFilament.End;
+      this.act();
     }
   }
 

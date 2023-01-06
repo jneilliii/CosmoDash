@@ -144,7 +144,6 @@ export class OctoPrintSocketService implements SocketService {
   }
 
   private handlePluginMessage(pluginMessage: OctoprintPluginMessage) {
-    // console.log(pluginMessage.plugin.plugin, pluginMessage.plugin.data)
     const plugins = [
       {
         check: (plugin: string) => plugin === 'DisplayLayerProgress-websocket-payload'
@@ -233,6 +232,12 @@ export class OctoPrintSocketService implements SocketService {
       } as OctoprintSocketEvent);
     }
 
+    const fanSpeedLogs = message?.current?.logs?.filter(l => l.startsWith("Send: M106 S"));
+    if (fanSpeedLogs && fanSpeedLogs.length > 0) {
+      const fanSpeedLog = fanSpeedLogs[0];
+      const fanSpeed = parseInt(fanSpeedLog.substring("Send: M106 S".length), 10) / 255 * 100;
+      this.printerStatus.fanSpeed = fanSpeed;
+    }
     this.printerStatusSubject.next(this.printerStatus);
   }
 
