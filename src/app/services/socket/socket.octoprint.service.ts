@@ -79,7 +79,7 @@ export class OctoPrintSocketService implements SocketService {
         set: 0,
         unit: '°C',
       },
-      fanSpeed: this.configService.isDisplayLayerProgressEnabled() ? 0 : -1,
+      fanSpeed: 0,
     } as PrinterStatus;
   }
 
