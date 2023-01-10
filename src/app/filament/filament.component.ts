@@ -138,10 +138,6 @@ export class FilamentComponent implements OnInit, OnDestroy {
     this.router.navigate(['/main-screen']);
   }
 
-  public ngOnDestroy(): void {
-    this.printerService.setTemperatureHotend(this.hotendPreviousTemperature);
-  }
-
   public increasePage(): void {
     this.transition('forward');
   }
