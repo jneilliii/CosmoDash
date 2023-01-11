@@ -138,6 +138,8 @@ export class FilamentComponent implements OnInit, OnDestroy {
     this.router.navigate(['/main-screen']);
   }
 
+  public ngOnDestroy(): void {}
+
   public increasePage(): void {
     this.transition('forward');
   }
