@@ -26,7 +26,7 @@ export enum EtapeFilament {
   styleUrls: ['./filament.component.scss'],
   providers: [FilamentService],
 })
-export class FilamentComponent implements OnInit, OnDestroy {
+export class FilamentComponent implements OnInit {
   private totalPages = 5;
   private hotendPreviousTemperature = 0;
   public etape: EtapeFilament;
@@ -137,8 +137,6 @@ export class FilamentComponent implements OnInit, OnDestroy {
   private navigateToMainScreen() {
     this.router.navigate(['/main-screen']);
   }
-
-  public ngOnDestroy(): void {}
 
   public increasePage(): void {
     this.transition('forward');
