@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { take, last } from 'rxjs/operators';
 
 import { ConfigService } from '../config/config.service';
 import { PrinterState, PrinterStatus, ZOffset } from '../model';
