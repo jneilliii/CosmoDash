@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import _ from 'lodash-es';
+import _, { clamp } from 'lodash-es';
 import { Observable, ReplaySubject, Subject } from 'rxjs';
 import { pluck, startWith } from 'rxjs/operators';
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
@@ -231,19 +231,28 @@ export class OctoPrintSocketService implements SocketService {
         },
       } as OctoprintSocketEvent);
     }
-
-    const fanSpeedLogs = message?.current?.logs?.filter(l => l.startsWith("Send: M106 S"));
-    if (fanSpeedLogs && fanSpeedLogs.length > 0) {
-      const fanSpeedLog = fanSpeedLogs[0];
-      const fanSpeed = parseInt(fanSpeedLog.substring("Send: M106 S".length), 10) / 255 * 100;
-      this.printerStatus.fanSpeed = fanSpeed;
-    }
+    this.extractFanSpeedFromLogs(message?.current?.logs);
+    
     this.printerStatusSubject.next(this.printerStatus);
   }
 
   public extractFanSpeed(message: DisplayLayerProgressData): void {
     this.printerStatus.fanSpeed =
       message.fanspeed === 'Off' ? 0 : message.fanspeed === '-' ? 0 : Number(message.fanspeed.replace('%', '').trim());
+  }
+
+  public extractFanSpeedFromLogs(logs: string[]): void {
+    if (logs) {
+      const fanSpeedRegex = /M106 S(\d+)/i;
+      const fanSpeedLogs = logs.filter(l => fanSpeedRegex.test(l));
+      
+      if (fanSpeedLogs && fanSpeedLogs.length > 0) {
+        const fanSpeedLog = fanSpeedLogs[0];
+        const fanSpeedResult = fanSpeedRegex.exec(fanSpeedLog);
+        const fanSpeed = Math.round(parseInt(fanSpeedResult[1], 10) / 255 * 100);
+        this.printerStatus.fanSpeed = clamp(fanSpeed, 0, 100);
+      }
+    }
   }
 
   //==== Job Status ====//
