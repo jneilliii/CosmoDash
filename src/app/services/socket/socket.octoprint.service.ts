@@ -146,6 +146,19 @@ export class OctoPrintSocketService implements SocketService {
   private handlePluginMessage(pluginMessage: OctoprintPluginMessage) {
     const plugins = [
       {
+        check: (plugin: string) => plugin === 'klipper',
+        handler: (data: any) => {
+          if (['error'].includes(data.subtype)) {
+            this.eventSubject.next({
+              action: 'show',
+              message: data.subtype,
+              text: data.payload,
+              choices: [],
+            } as PrinterNotification);
+          }
+        },
+      },
+      {
         check: (plugin: string) => plugin === 'DisplayLayerProgress-websocket-payload'
           && this.configService.isDisplayLayerProgressEnabled(),
         handler: (data: unknown) => {

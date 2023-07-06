@@ -52,8 +52,16 @@ export class EventService implements OnDestroy {
       'Reheat Done': $localize`:@@prompt-reheat-done:The hotend is now ready.`,
       'Reheating...': $localize`:@@prompt-reheating:Reheating...`,
     };
+    // TODO list and localize
+    const errors = {};
+
     if (event.action === 'close') {
       this.notificationService.closeNotification();
+    } else if (['error'].includes(event.message)) {
+      this.notificationService.setError(
+        event.message, // TODO localize
+        event.text,
+      );
     } else if (event.choices?.length > 0) {
       // event is action:prompt
       this.notificationService.setPrompt(
