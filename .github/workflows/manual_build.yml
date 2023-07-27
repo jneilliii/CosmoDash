@@ -13,7 +13,7 @@ jobs:
       - name: Cache node modules
         uses: actions/cache@v2
         env:
-          cache-name: cosmodash-node-modules
+          cache-name: octodash-node-modules
         with:
           path: ~/.npm
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
@@ -26,10 +26,10 @@ jobs:
       - name: Installing Dependencies
         run: npm ci
       - name: Building Application
-        run: npm run build:prod
+        run: npm run build
       - name: Packaging Application
         run: npm run electron:pack
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
-          path: package/cosmodash*.deb
+          path: package/octodash*.deb
