@@ -26,9 +26,7 @@ jobs:
       - name: Installing Dependencies
         run: npm ci
       - name: Building Application
-        run: npm run build
-      - name: Packaging Application
-        run: npm run electron:pack
+        run: npm run pack
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
